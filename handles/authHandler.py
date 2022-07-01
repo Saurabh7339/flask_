@@ -1,5 +1,10 @@
+import bcrypt
 from database import db
 from models.model import User
+from flask_bcrypt import Bcrypt
+
+_bcrypt = Bcrypt()
+
 
 class HandleAuth:
     @staticmethod
@@ -10,7 +15,15 @@ class HandleAuth:
         if(user):
             return "User Already Exists"
         else:
-            user = User(email=email,password=password,name=name)
+            hashed_pass = _bcrypt.generate_password_hash(password)
+            user = User(email=email,password=hashed_pass,name=name)
             db.session.add(user)
             db.session.commit()
             return "User Registered Successfully"
+    @staticmethod
+    def handleLogin(email,password):
+        print(email,password)
+        user = User.query.filter_by(email=email).first()
+        if(_bcrypt.check_password_hash(user.password,password)):
+            return "Hey user"
+    # return "hello"        
