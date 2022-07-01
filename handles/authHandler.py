@@ -2,6 +2,7 @@ import bcrypt
 from database import db
 from models.model import User
 from flask_bcrypt import Bcrypt
+from flask_login import login_user
 
 _bcrypt = Bcrypt()
 
@@ -25,6 +26,7 @@ class HandleAuth:
         print(email,password)
         user = User.query.filter_by(email=email).first()
         if(_bcrypt.check_password_hash(user.password,password)):
+            login_user(user)
             return "Hey user"
         else:
             return "Invalid Credentials"
