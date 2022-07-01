@@ -26,4 +26,6 @@ class HandleAuth:
         user = User.query.filter_by(email=email).first()
         if(_bcrypt.check_password_hash(user.password,password)):
             return "Hey user"
+        else:
+            return "Invalid Credentials"
     # return "hello"        
