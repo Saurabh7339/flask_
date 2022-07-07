@@ -15,12 +15,13 @@ from flask_sqlalchemy import SQLAlchemy
 app = Flask(__name__)
 login_manager = LoginManager()
 app.config['SECRET_KEY'] = 'thisismysecretkey'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///saurabh.db'
+# app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///saurabh.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root@localhost/Notes'   
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 # db = SQLAlchemy(app)
 db.init_app(app)
-with app.app_context():
-    db.create_all()
+app.app_context().push()
+db.create_all()
 login_manager.init_app(app)
 
 app.register_blueprint(_auth_, url_prefix="/auth")
